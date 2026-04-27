@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>交互式加法器</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; background: #f4f4f9; }
+        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 350px; }
+        h2 { text-align: center; color: #333; }
+        #display { font-size: 1.5rem; background: #eee; padding: 10px; border-radius: 6px; text-align: right; margin-bottom: 1rem; min-height: 1.5rem; word-wrap: break-word; }
+        .controls { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        button { padding: 15px; font-size: 1.2rem; border: none; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #ddd; }
+        .num { background: #fff; border: 1px solid #ccc; }
+        .op { background: #ff9500; color: white; }
+        .op:hover { background: #e68600; }
+        .action { background: #ff3b30; color: white; grid-column: span 2; }
+        .total-display { margin-top: 20px; font-weight: bold; color: #007aff; font-size: 1.2rem; border-top: 2px solid #eee; pt: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>加法計算器</h2>
+    <div id="display">0</div>
+    
+    <div class="controls">
+        <!-- 數字按鈕 -->
+        <button class="num" onclick="appendNum(7)">7</button>
+        <button class="num" onclick="appendNum(8)">8</button>
+        <button class="num" onclick="appendNum(9)">9</button>
+        <button class="op" onclick="addToSum()">+</button>
+        
+        <button class="num" onclick="appendNum(4)">4</button>
+        <button class="num" onclick="appendNum(5)">5</button>
+        <button class="num" onclick="appendNum(6)">6</button>
+        <button class="num" onclick="appendNum(0)">0</button>
+
+        <button class="num" onclick="appendNum(1)">1</button>
+        <button class="num" onclick="appendNum(2)">2</button>
+        <button class="num" onclick="appendNum(3)">3</button>
+        <button class="op" onclick="calculateFinal()">=</button>
+
+        <button class="action" onclick="reset()">歸零</button>
+    </div>
+
+    <div class="total-display">當前總和: <span id="sum">0</span></div>
+    <div style="font-size: 0.8rem; color: #666; margin-top: 5px;">已輸入數字: <span id="history">無</span></div>
+</div>
+
+<script>
+    let currentInput = "";
+    let numbers = [];
+    let sum = 0;
+
+    const displayDiv = document.getElementById('display');
+    const sumSpan = document.getElementById('sum');
+    const historySpan = document.getElementById('history');
+
+    function appendNum(num) {
+        currentInput += num.toString();
+        displayDiv.innerText = currentInput;
+    }
+
+    function addToSum() {
+        if (currentInput === "") return;
+        
+        let val = parseFloat(currentInput);
+        numbers.push(val);
+        sum += val;
+        
+        // 更新介面
+        sumSpan.innerText = sum;
+        historySpan.innerText = numbers.join(" + ");
+        
+        // 清空當前輸入準備下一個
+        currentInput = "";
+        displayDiv.innerText = "0";
+    }
+
+    function calculateFinal() {
+        addToSum(); // 把最後一個數字加進去
+        displayDiv.innerText = sum;
+    }
+
+    function reset() {
+        currentInput = "";
+        numbers = [];
+        sum = 0;
+        displayDiv.innerText = "0";
+        sumSpan.innerText = "0";
+        historySpan.innerText = "無";
+    }
+</script>
+
+</body>
+</html>
